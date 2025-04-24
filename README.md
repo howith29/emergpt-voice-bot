@@ -9,7 +9,10 @@ GPT와 연동된 챗봇을 통해 긴급상황 대응 및 관리자 알람이 �
 | 프로젝트명 | emergpt-voice-bot |
 | 주제 | 중대재해 위험 사안 발견 시, Voice Bot을 이용한 현장 근로자 제보 시스템 |
 | 주요 기술 | Flask, OpenAI GPT(gpt-3.5-turbo), AWS(Transcribe, S3, DynamoDB), KoNLPy |
-| 적용 대상 | 중대재해 발생 가능 산업현장, 위험 작업 환경, 긴급 대응 시스템 |  
+| 적용 대상 | 중대재해 발생 가능 산업현장, 위험 작업 환경, 긴급 대응 시스템 |   
+<br/>
+  
+![Image](https://github.com/user-attachments/assets/a0eff313-bf3a-4da3-a542-b712886a1324)
   
 ## 🎯 2. Background & Goal
 ### Backgroud
