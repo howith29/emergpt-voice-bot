@@ -2,6 +2,7 @@
 
 ## 1. Project OverView
 **중대재해 예방을 위한 AI 기반 음성 감지 챗봇 시스템**
+  
 | 항목 | 내용 |
 | ---- | ----- |
 | 프로젝트명 | emergpt-voice-bot |
@@ -41,6 +42,7 @@ eulji_project/
 - **긴급 분석**: Flask 서버 + GPT + Komoran 형태소 분석
 - **알림 전송**: AWS SNS (향후 확장 가능)
 
+[사용자] → [음성 입력] → [Transcribe] → [Flask 서버 (GPT 분석)] → [긴급 판별] → [저장 및 응답]
 ## 4. Team 
 ---
 ### 4.1. Team
