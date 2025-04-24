@@ -72,9 +72,11 @@ eulji_project/
 - NLP: KoNLPy Komoran
 - Cloud Infra: AWS(S3, DynamoDB, Transcribe)
 
-## 👥  7. Team 
-* Team: ACE
-* Member: 이슬희, 이하은, 김민지, 김진아, 김용준, 최준우, 김태훈, 한동훈
+## 👥  7. Team
+<img src="https://github.com/user-attachments/assets/7d3a7275-15e3-4758-b56a-f36b44d9cac5" width="200"/>  
+
+- Team: ACE <br/> 
+- Member: 이슬희, 이하은, 김민지, 김진아, 김용준, 최준우, 김태훈, 한동훈
 
 | position | member |
 | ---- | ---- |
@@ -88,4 +90,6 @@ eulji_project/
 - BE: 멀티스레딩 기반 동시성 처리 오류 디버깅 등 간단한 트러블 슈팅, 서버 테스트
 - FE: UI/UX 설계, html 템플릿 작성
 
+## More Info
+..
 
