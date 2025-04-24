@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>중대재해 신고</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@900&display=swap" rel="stylesheet">
+    <!--<link rel="stylesheet" type="text/css" href="select.css">-->
+    <style>
+        body {
+            font-family: 'Gothic A1', sans-serif;
+            background-color:#f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+        .container1 {
+            display: flex;
+            justify-content: space-between;
+            color: black;
+            padding: 70px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+
+        }
+        
+        .logo-1 {
+            flex-basis: 900px;
+            font-size: 6vw;
+        }
+        
+        .logo-2 {
+            flex-basis: 300px;
+            width: 100px; /* 이미지 컨테이너의 가로 크기 */ 
+            height: 200px; /* 이미지 컨테이너의 세로 크기 */ 
+            border: None;
+            padding: 10px;
+            text-align: center;
+            overflow: hidden;
+
+        }
+        /* 이미지 스타일 */
+        .logo-2 img {
+            background-color: None;
+            border: None;
+            width: 100%; /* 이미지의 너비를 100%로 설정하여 컨테이너에 맞게 조절 */
+            height: 100%; /* 이미지의 높이를 100%로 설정하여 컨테이너에 맞게 조절 */
+            object-fit: fill; /* 이미지가 잘리지 않도록 설정 */
+        }
+        .row {
+            display: flex; 
+            width: 100%; 
+            justify-content: center; 
+        }
+
+        .box1,
+        .box2,
+        .box3 {
+            display: flex; 
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+                        0 10px 10px rgba(0,0,0,0.22);
+            margin: 0 70px; 
+            text-align: center; 
+            font-family: Impact,'Gasoek One', sans-serif;
+            font-family: 'Orbit', sans-serif;
+
+        }
+
+        .box2 {
+            /*background: linear-gradient(to right, #606c88, #3f4c6b);*/
+            background: linear-gradient(135deg, #ff5e28 0%, #fbe964 100%);
+            color:white;
+            flex: 5; 
+            height: 25vh;
+            font-size: 6vw;
+            font-weight: bold;
+            font-family: 'Gasoek One', sans-serif;
+            font-family: 'Orbit', sans-serif;
+            margin-left:10px;
+            border-radius: 80px 80px 0 80px; /* 상단 왼쪽, 상단 오른쪽, 하단 오른쪽, 하단 왼쪽 */
+
+            
+        }
+
+        .box1 {
+            background: linear-gradient(135deg, #fa5777 0%, #a80513 100%);
+            /*background: linear-gradient(to right, #ED213A, #93291E);*/
+            color: white;
+            flex: 5; 
+            height: 25vh;
+            font-size: 6vw;
+            font-weight: bold;
+            margin-right:10px;
+            font-family: 'Gasoek One', sans-serif;
+            font-family: 'Orbit', sans-serif;
+            border-radius: 0 80px 80px 80px; /* 상단 왼쪽, 상단 오른쪽, 하단 오른쪽, 하단 왼쪽 */
+
+        }
+        .box3 {
+            /*background: linear-gradient(to right, #FFD700, #FFA500);*/
+            background: linear-gradient(135deg, #204080 0%, #202020 100%);
+            color: white;
+            flex: 5; 
+            height: 15vh;
+            font-size: 4vw;
+            font-weight: bold;
+            font-family: 'Gasoek One', sans-serif;
+            font-family: 'Orbit', sans-serif;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-radius: 80px 80px 80px 80px; /* 상단 왼쪽, 상단 오른쪽, 하단 오른쪽, 하단 왼쪽 */
+
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container1">
+            <div class = "logo-1">중대재해 신고</br> 챗봇</div>
+            <div class = "logo-2">
+                <img src="https://i.ibb.co/xHTdGsP/ACElogo.png" alt="">
+            </div>  
+        </div>
+    </header>
+    <main>
+        <div class="container2">
+            <div class="row">
+                <div class="box1" onclick="goToUserPage()">신고하기</div>
+                <div class="box2" onclick="showAlert()">긴급</div>
+            </div>
+            <div class="box3" onclick="goToLoginPage()">관리자용</div>
+        </div>
+    </main>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/aws-sdk@2.1445.0/dist/aws-sdk.min.js"> </script>
+<script>
+    AWS.config.update({
+        region: 'ap-northeast-1', // 리전을 ap-northeast-1로 변경
+        credentials: new AWS.Credentials('','')
+    });
+
+// 
+    function sendSNSAlert(message) {
+        const sns_client = new AWS.SNS(); // SNS 클라이언트 생성
+        const topicArn = "";
+
+        try {
+            const snsParams = {
+                TopicArn: topicArn,
+                Message: message
+            };
+            sns_client.publish(snsParams, (err, data) => {
+                if (err) {
+                    console.error("알림 전송 중 오류 발생:", err);
+                } else {
+                    console.log("알림이 성공적으로 전송되었습니다. TopicArn : ", topicArn);
+                }
+            });
+        } catch (e) {
+            console.error("알림 전송 중 예외 발생:", e);
+        }
+    }
+// 
+
+    function showAlert() {
+        var result = confirm("신고하겠습니까?");
+        if (result) {
+            alert("신고가 접수되었습니다.");
+            const snsMessage = "긴급신고 버튼이 눌렸습니다. 즉시 상황을 확인해주세요.";
+            sendSNSAlert(snsMessage);
+        } else {
+            alert("신고가 취소되었습니다.");
+        }
+    }
+    
+     function goToUserPage() {
+        window.location.href = "{{ url_for('user') }}";
+    }
+
+    function goToLoginPage() {
+        window.location.href = '/login';
+    }
+        
+</script>
+</html>

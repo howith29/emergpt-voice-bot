@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>신고확인 페이지</title>
+    <style>
+        body {
+            font-family: 'NanumSquare', sans-serif;
+            margin: 0;
+            background-color: #f2f2f2;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #204080 0%, #202020 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+            padding: 10px;
+        }
+
+        .header-title {
+            font-weight: bold;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            margin: 0 auto;
+            overflow-x: auto;
+            height: 100vh;
+        }
+
+        .filter-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-left: 10px;
+        }
+
+        .filter-label {
+            margin-right: 10px;
+        }
+
+        .filter-select,
+        .filter-input {
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        .alert-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        .alert-table th,
+        .alert-table td {
+            max-width: 200px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: normal;
+        }
+
+        .alert-table th {
+            background-color: #fdf8e1;
+        }
+
+        .alert-table-container {
+            max-height: 100%;
+            overflow-y: auto;
+        }
+        
+        
+
+        .checkbox-cell {
+            text-align: center;
+        }
+        
+        .checkbox1-cell {
+            text-align: center;
+        }
+        
+
+        .close-button {
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 12px;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .close-button:hover {
+            background-color: #eee;
+        }
+    </style>
+</head>
+<body>
+    <!-- 페이지 상단 헤더 영역 -->
+    <div class="header">
+        <div class="header-first"></div>
+        <div class="header-title">신고 현황</div>
+        <button class="close-button" id="closeButton">✖️</button>
+
+    </div>
+
+    <!-- 데이터 필터링과 테이블을 보여주는 컨테이너 영역 -->
+    <div class="container">
+        <div class="filter-container">
+            <label class="filter-label" for="filterColumn">🔍</label>
+            <select class="filter-select" id="filterColumn">
+                <option value="all">전체</option>
+                <option value="incident">재해상황</option>
+                <option value="location">위치</option>
+                <option value="timestamp">발견시각</option> 
+                <option value="progress">진행상태</option>
+                <option value="reporttime">신고시각</option>
+
+            </select>
+            <input type="text" class="filter-input" id="filterInput" placeholder="검색...">
+        </div>
+
+        <div class="alert-table-container">
+            <table class="alert-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>재해상황</th>
+                        <th>진행상태</th>
+                        <th>위치</th>
+                        <th>신고시각</th>
+                        <th>발견시각</th>
+                        <th>확인</th>
+                        <th>해결</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- 여기에 데이터가 동적으로 추가될 예정 -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- AWS SDK 스크립트 로드 -->
+    <script src="https://cdn.jsdelivr.net/npm/aws-sdk@2.1118.0/dist/aws-sdk.min.js"></script>
+    <script>
+        // AWS 설정 및 인증 정보 설정
+        AWS.config.update({
+            region: 'ap-northeast-2',
+            credentials: new AWS.Credentials('','')
+        });
+
+        // AWS DynamoDB DocumentClient 생성
+        const dynamodb = new AWS.DynamoDB.DocumentClient();
+        const tableBody = document.getElementById('tableBody');
+
+
+        // 초기 데이터 로드 함수
+        async function fetchData() {
+            try {
+                const params = {
+                    TableName: 'test_2_chatbot'
+                };
+                const data = await dynamodb.scan(params).promise();
+
+                data.Items.forEach((report, index) => {
+                    // 테이블 행 생성
+                    const row = document.createElement('tr');
+
+                    // 테이블 셀 생성 및 데이터 채우기
+                    const indexCell = document.createElement('td');
+                    indexCell.textContent = index + 1;
+                    row.appendChild(indexCell);
+
+                    const incidentCell = document.createElement('td');
+                    incidentCell.textContent = `${report.incident} - ${report.incident_status}`;
+                    row.appendChild(incidentCell);
+
+                    const progressCell = document.createElement('td');
+                    progressCell.textContent = report.user_id;
+                    row.appendChild(progressCell);
+
+                    const locationCell = document.createElement('td');
+                    locationCell.textContent = report.location;
+                    row.appendChild(locationCell);
+
+                    const timestampCell = document.createElement('td');
+                    timestampCell.textContent = report.timestamp;
+                    row.appendChild(timestampCell);
+
+                    const reporttimeCell = document.createElement('td');
+                    reporttimeCell.textContent = report.reporttime;
+                    row.appendChild(reporttimeCell);
+                    
+                    const confirmCell = document.createElement('td');
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.name = 'confirmCheckbox';
+                    confirmCell.className = 'checkbox-cell';
+                    confirmCell.appendChild(checkbox);
+                    row.appendChild(confirmCell);
+                    
+                    const solvedCell = document.createElement('td');
+                    const checkboxx = document.createElement('input');
+                    checkboxx.type = 'checkbox';
+                    checkboxx.name = 'solvedCheckbox';
+                    solvedCell.className = 'checkbox1-cell';
+                    solvedCell.appendChild(checkboxx);
+                    row.appendChild(solvedCell);
+
+                    // 테이블 행을 테이블 본문에 추가
+                    tableBody.appendChild(row);
+                });
+
+                let time1;
+                let time2;
+                let checktime;
+                // 체크박스 클릭 이벤트 리스너
+                tableBody.addEventListener('click', async function(event) {
+                    if (event.target.type === 'checkbox' && event.target.name === 'confirmCheckbox') {
+                        const checkbox = event.target;
+                        const row = checkbox.closest('tr');
+                
+                        if (row) {
+                            const currentTime1 = new Date().toISOString();
+                            const time1 = new Date(currentTime1).getTime();
+                            checktime = time1;
+                        }
+                    }
+                });
+                tableBody.addEventListener('click', async function(event) {
+                    if (event.target.type === 'checkbox' && event.target.name === 'solvedCheckbox') {
+                        const checkboxx = event.target;
+                        const row = checkboxx.closest('tr');
+                        
+                        if (row) {
+                            const currentTime2 = new Date().toISOString();
+                            const time2 = new Date(currentTime2).getTime();
+                            const timeDifferenceInMilliseconds = Math.abs(time2 - checktime);
+                            const millisecondsPerMinute = 60 * 1000;
+                            const minutes = Math.floor(timeDifferenceInMilliseconds / millisecondsPerMinute);
+                        
+                            const cells = row.querySelectorAll('td');
+                            const incidentCell = cells[2]; // 재해상황 열의 셀
+                            const timestampCell = cells[4]; // 타임스탬프 열의 셀
+                
+                            const incidentID = incidentCell.textContent.trim(); // 재해상황 ID 값
+                            const timestamp = timestampCell.textContent.trim(); // 타임스탬프 값
+
+                            const params = {
+                                TableName: "test_2_chatbot",
+                                Key: {
+                                    user_id: incidentID, // 파티션 키 값
+                                    timestamp: timestamp // 정렬 키 값
+                                }
+                            };
+                            
+                            fetch('/manager1', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ user_id: incidentID, timestamp: timestamp, minutes: minutes, start_time:time1, end_time:time2 })
+                            });
+                            
+                            console.log("incidentID는 : " + incidentID + "timestampe는 : " + timestamp);
+                            dynamodb.delete(params, (error, data) => {
+                                if (error) {
+                                    console.error('Error deleting item from DynamoDB:', error);
+                                } else {
+                                    console.log('Item deleted from DynamoDB');
+
+                                    row.remove();
+                                }
+                            });
+                        }
+                    }
+                });
+ 
+                
+                
+            }catch (error) {
+                console.error('Error fetching data from DynamoDB:', error);
+            }
+        }
+        
+       // AWS SDK의 현재 리전 저장
+        const currentRegion = AWS.config.region;
+        
+        // AWS 설정 및 인증 정보 설정
+        AWS.config.update({
+            region: 'ap-northeast-1', // SNS를 보낼 리전으로 설정
+            credentials: new AWS.Credentials('','') // Access Key와 Secret Key도 설정해야 합니다.
+        });
+        
+        const closeButton = document.getElementById('closeButton');
+        closeButton.addEventListener('click', navigateToSelectPage);
+
+        // Select 페이지로 이동하는 함수
+        function navigateToSelectPage() {
+             window.location.href = '/'; 
+        }
+
+       
+        function sendSNSAlert(message) {
+            const sns_client = new AWS.SNS(); // SNS 클라이언트 생성
+            const topicArn = "";
+        
+            try {
+                const snsParams = {
+                    TopicArn: topicArn,
+                    Message: message
+                };
+                sns_client.publish(snsParams, (err, data) => {
+                    // 이전 리전으로 리전 복원
+                    AWS.config.update({ region: currentRegion });
+        
+                    if (err) {
+                        console.error("알림 전송 중 오류 발생:", err);
+                    } else {
+                        console.log("알림이 성공적으로 전송되었습니다.");
+                    }
+                });
+            } catch (e) {
+                // 이전 리전으로 리전 복원
+                AWS.config.update({ region: currentRegion });
+        
+                console.error("알림 전송 중 예외 발생:", e);
+            }
+        }
+
+        // 초기 데이터 로드 호출
+        fetchData();
+        
+        //신고시각 정렬
+        const timestampHeader = document.querySelector('.alert-table th:nth-child(5)'); 
+        let sortOrder = false;
+
+        timestampHeader.addEventListener('click', () => {
+            const rows = Array.from(tableBody.querySelectorAll('tr'));
+        
+            rows.sort((a, b) => {
+                const aTimestamp = new Date(a.cells[4].textContent.trim());
+                const bTimestamp = new Date(b.cells[4].textContent.trim());
+        
+                if (sortOrder) {
+                    return aTimestamp - bTimestamp;
+                } else {
+                    return bTimestamp - aTimestamp;
+                }
+            });
+        
+            tableBody.innerHTML = '';
+            rows.forEach(row => tableBody.appendChild(row));
+        
+            sortOrder = !sortOrder;
+        });
+
+
+            // 검색 필터와 검색어 입력 필드
+        const filterColumnSelect = document.getElementById('filterColumn');
+        const filterInput = document.getElementById('filterInput');
+        
+        // 검색 필터 및 검색어를 기반으로 테이블 필터링
+        function applySearchFilter() {
+            const searchTerm = filterInput.value.toLowerCase();
+        
+            const rows = tableBody.querySelectorAll('tr');
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                let shouldShowRow = false;
+        
+
+                cells.forEach(cell => {
+                    const cellText = cell.textContent.toLowerCase();
+                        if (cellText.includes(searchTerm)) {
+                            shouldShowRow = true;
+                    }
+                });
+        
+                row.style.display = shouldShowRow ? 'table-row' : 'none';
+            });
+        }
+        
+        // 검색 필터 및 검색어 입력 필드의 변경 이벤트 처리
+        filterColumnSelect.addEventListener('change', applySearchFilter);
+        filterInput.addEventListener('input', applySearchFilter);
+        
+        // 초기 데이터 로드 및 검색 필터 적용
+        async function fetchDataAndApplyFilter() {
+            // 검색 필터 적용
+            applySearchFilter();
+        }
+        
+        // 검색 필터 적용 초기화
+        fetchDataAndApplyFilter();
+
+    </script>
+</body>
+</html>
