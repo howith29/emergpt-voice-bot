@@ -15,14 +15,17 @@
 ## 3. Project Structure
 ---
 ### 3.1. file Structure
-eulji_project/  
-├── Chatbot.py  
-├── jin.py  
-└── templates  
-    ├── login.html  
-    ├── manager1.html  
-    ├── select.html  
-    └── user.html 
+```
+eulji_project/
+├── Chatbot.py
+├── jin.py
+└── templates
+    ├── login.html
+    ├── manager1.html
+    ├── select.html
+    └── user.html
+```
+
 ### 3.2. System Architecture
 
 ## 4. Team 
