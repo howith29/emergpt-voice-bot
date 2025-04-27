@@ -38,7 +38,7 @@ DynamoDB 저장
    ↓
 관리자 알림 (SMS)
 ```
-<img src="https://github.com/user-attachments/assets/bdeba10d-447c-47e8-8933-fab6bbcba933" width="600"/>
+<img src="https://github.com/user-attachments/assets/bdeba10d-447c-47e8-8933-fab6bbcba933" width="500"/>
 
 
 ## 📌 4. Key Features
@@ -51,7 +51,7 @@ DynamoDB 저장
 | 신고 기록 저장 | DynamoDB를 통한 유저 대화 상태 저장 |
 | 확장 가능성 | 관리자 페이지, 알림 시스템(SNS), 모바일화 준비 완료 |
 
-<img src="https://github.com/user-attachments/assets/d045cc9f-cf1e-422d-8181-fff113689c7c" width="600"/>
+<img src="https://github.com/user-attachments/assets/d045cc9f-cf1e-422d-8181-fff113689c7c" width="500"/>
 
 ## 📁 5. File Structure
 ```
