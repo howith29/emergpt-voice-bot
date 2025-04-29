@@ -89,7 +89,7 @@ eulji_project/
 ---
 **🙋‍♀️ My Tesk**  
 - Team Leader/PM: 전체 일정 및 역할 조율, 기획 및 발표 자료 작성
-- BE: 멀티스레딩 기반 동시성 처리 오류 디버깅 등 간단한 트러블 슈팅, 서버 테스트
+- BE: 서포트
 - FE: UI/UX 설계, html 템플릿 작성
 
 ## More Info
