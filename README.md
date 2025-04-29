@@ -80,12 +80,6 @@ eulji_project/
 - Team: ACE <br/> 
 - Member: 이슬희, 이하은, 김민지, 김진아, 김용준, 최준우, 김태훈, 한동훈
 
-| position | member |
-| ---- | ---- |
-| **Team Leader & PM** | 이슬희 |
-| **BE** | 이하은, 김진아, 최준우, 김용준 |
-| **FE** | 이슬희, 김민지 |
-| **AI/Cloud** |  최준우, 김태훈, 한동훈 |
 ---
 **🙋‍♀️ My Tesk**  
 - Team Leader/PM: 전체 일정 및 역할 조율, 기획 및 발표 자료 작성
